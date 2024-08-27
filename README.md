@@ -1,5 +1,9 @@
 ### Loom:
+### Entities
 https://www.loom.com/share/3ef1599987044bfd999d1468cd072b27
+
+### Repositories
+https://www.loom.com/share/3c3c5306f89945ed9a2f4a8294cf15c1
 
 
 
