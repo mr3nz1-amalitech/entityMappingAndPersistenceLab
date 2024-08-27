@@ -1,4 +1,4 @@
-package com.mr3nz1.entityMappingAndPersistenceLab.repository;
+package com.mr3nz1.entityMappingAndPersistenceLab.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
