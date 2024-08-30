@@ -2,10 +2,11 @@ package com.mr3nz1.entityMappingAndPersistenceLab.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
-@Table(name = "departments")
+@Document("departments")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,7 @@ public class Department {
     @Column(nullable = false)
     private String building;
 
+    @DBRef
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "department_no", referencedColumnName = "doctor_no")
     private Doctor head_of_department;
 }

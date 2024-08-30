@@ -5,28 +5,29 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.data.redis.core.RedisHash;
 
-@Entity
+import java.io.Serializable;
+import java.util.UUID;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "employees")
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int employee_no;
+@Document("employees")
+public class Employee implements Serializable {
+    @MongoId(FieldType.OBJECT_ID)
+    private ObjectId id;
 
-    @Column(nullable = false)
     private String surname;
 
-    @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
     private String telephone;
-
 }

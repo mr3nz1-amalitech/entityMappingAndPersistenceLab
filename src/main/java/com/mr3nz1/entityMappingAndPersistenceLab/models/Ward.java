@@ -2,25 +2,24 @@ package com.mr3nz1.entityMappingAndPersistenceLab.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
-@Table(name = "wards")
+@Document("wards")
 public class Ward {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long bed_count;
 
-    @Column(nullable = false)
     private String ward_no;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @DBRef
+    @OneToOne
     private Nurse supervisor;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @DBRef
+    @OneToOne
     private Department department_code;
 }

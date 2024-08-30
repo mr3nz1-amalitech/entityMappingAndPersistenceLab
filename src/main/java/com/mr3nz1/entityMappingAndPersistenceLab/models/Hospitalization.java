@@ -2,27 +2,25 @@ package com.mr3nz1.entityMappingAndPersistenceLab.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
-@Table(name = "hospitalization")
+@Document("hospitalization")
 public class Hospitalization {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
     private int bed_no;
 
-    @Column(nullable = false)
     private String diagnosis;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "patient_no", referencedColumnName = "patient_no")
+    @DBRef
+    @ManyToOne
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ward_no", referencedColumnName = "id")
+    @DBRef
+    @ManyToOne
     private Ward ward_no;
 
 }

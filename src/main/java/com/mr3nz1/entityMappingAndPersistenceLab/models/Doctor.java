@@ -2,14 +2,15 @@ package com.mr3nz1.entityMappingAndPersistenceLab.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
-@Table(name = "users")
+@Document("users")
 public class Doctor {
     @Id
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doctor_no", referencedColumnName = "employee_no")
+    @DBRef
+    @OneToOne
     private Employee doctor_no;
 
     @Column(nullable = false)

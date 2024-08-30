@@ -2,23 +2,21 @@ package com.mr3nz1.entityMappingAndPersistenceLab.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
-@Table(name = "nurses")
+@Document("nurses")
 public class Nurse {
     @Id
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToOne
     private Employee nurse_no;
 
-    @Column(nullable = false)
     private String rotation;
 
-    @Column(nullable = false)
     private String salary;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "department_code", referencedColumnName = "department_code")
+    @DBRef
+    @OneToOne
     private Department department_code;
 }

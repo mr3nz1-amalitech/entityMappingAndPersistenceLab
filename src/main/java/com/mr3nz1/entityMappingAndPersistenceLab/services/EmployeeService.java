@@ -1,80 +1,42 @@
 package com.mr3nz1.entityMappingAndPersistenceLab.services;
 
+import com.mongodb.client.MongoClients;
 import com.mr3nz1.entityMappingAndPersistenceLab.models.Employee;
 import com.mr3nz1.entityMappingAndPersistenceLab.repositories.EmployeeRepository;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
+import org.bson.types.ObjectId;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmployeeService {
-    private EmployeeRepository employeeRepository;
-    private TransactionManager transactionManager;
+    private final EmployeeRepository employeeRepository;
+    RedisTemplate<String, Object> redisTemplate;
 
-    public EmployeeService(EmployeeRepository employeeRepository, TransactionManager transactionManager) {
+    public EmployeeService(EmployeeRepository employeeRepository, RedisTemplate<String, Object> redisTemplate) {
         this.employeeRepository = employeeRepository;
-        this.transactionManager = transactionManager;
+        this.redisTemplate = redisTemplate;
     }
 
-    @Cacheable("employees")
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
-    }
-
-    @Cacheable(value = "employee", key = "#id")
-    public Employee getEmployeeById(int id) {
-        Optional<Employee> employee = employeeRepository.findById(id);
-        if (employee.isPresent()) {
-            return employeeRepository.findById(id).get();
-        }
-
-        return null;
-    }
-
-
-    @CachePut(value = "employee", key = "#employee.employee_no")
     public Employee addEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+        Employee newEmployee = employeeRepository.save(employee);
+        redisTemplate.opsForSet().add(employee.getId() + "", employee);
+        return newEmployee;
     }
 
-    @CachePut(value = "employee", key = "#employee.employee_no")
-    public void updateEmployee(Employee employee) {
-        employeeRepository.save(employee);
+    @Cacheable(value = "employees")
+    public List<Employee> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employees;
     }
 
-    @CacheEvict(value = "employee", key = "#id")
-    public boolean deleteEmployee(int id) {
-        try {
-            employeeRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+    @Cacheable(value = "employees", key = "#id")
+    public Employee getEmployeeById(ObjectId id) throws Exception {
+        if (!employeeRepository.existsById(id)) throw new Exception("Can't find employee of id : " + id);
 
-    @Cacheable(value = "employee", key = "#firstName")
-    public Employee findByFirstName(String firstName) {
-        return employeeRepository.findByFirstName(firstName);
-    }
-
-    @Transactional
-    public boolean deleteEmployees(int[] ids) {
-        try {
-            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-            Arrays.stream(ids).forEach(this::deleteEmployee);
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
+        return employeeRepository.findById(id).get();
     }
 }
