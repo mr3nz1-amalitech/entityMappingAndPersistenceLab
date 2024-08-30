@@ -5,6 +5,12 @@ https://www.loom.com/share/3ef1599987044bfd999d1468cd072b27
 ### Repositories
 https://www.loom.com/share/3c3c5306f89945ed9a2f4a8294cf15c1
 
+###No sql (redis and mongodb)
+https://www.loom.com/share/95f63f3bffb14c74909929dc05a53357
+
+### Redis and Mongo Doc (nosql)
+https://docs.google.com/document/d/1LnReADzWY88Pj3uCbW2ufYHo4fwCUBoCPh4qWtSGb78/edit#heading=h.juzqab15esl8
+
 
 
 
